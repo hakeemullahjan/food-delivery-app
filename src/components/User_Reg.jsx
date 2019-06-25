@@ -26,7 +26,7 @@ class User_Reg extends Component {
         };
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.writeUserData = this.writeUserData.bind(this)
+
 
     }
 
@@ -196,7 +196,7 @@ class User_Reg extends Component {
                 <br />
                 <div>
                     <Form onSubmit={this.handleSubmit} className='shadow p-3 mb-5 bg-white rounded' >
-                        <h1 >User Registration</h1>
+                        <h1 >USER REGISTRATION</h1>
                         <br />
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridFullName">

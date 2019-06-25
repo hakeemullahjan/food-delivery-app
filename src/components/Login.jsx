@@ -44,14 +44,14 @@ class Login extends Component {
 
 
     signInUser(email, password) {
-        auth.signInWithEmailAndPassword(email, password)
+            auth.signInWithEmailAndPassword(email, password)
             .then(() => {
-                console.log("User successfully loggedin");
-                console.log(this.props)
-                NotificationManager.success('User successfully logged In', 'Done!');
+                console.log("User successfully signed in");
+                // console.log(this.props)
+                NotificationManager.success('Successfully signed in', 'Done!');
 
                 setTimeout(() => {
-                    this.props.history.push('/home')
+                    this.props.history.push('/')
                 }, 4000)
             })
             .catch((error) => {
@@ -73,7 +73,7 @@ class Login extends Component {
 
                 <div>
                     <Form onSubmit={this.handleSubmit} className='shadow p-3 mb-5 bg-white rounded'>
-                        <h1>Login</h1>
+                        <h1>LOGIN</h1>
                         <br />
 
                         <Form.Group controlId="formBasicEmail">
