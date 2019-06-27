@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { db, auth } from '../config/firebase'
+import { db, auth, storage } from '../config/firebase'
 import firebase from 'firebase';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
@@ -17,6 +17,9 @@ class Rest_Reg extends Component {
             country: '',
             city: '',
             restName: '',
+            img: null,
+            url: '',
+            progress: 0,
             restaurants: {}
 
         };
@@ -29,12 +32,18 @@ class Rest_Reg extends Component {
         // console.log(e.target.value)
         this.setState({ [e.target.name]: e.target.value })
 
+        if (e.target.files) {
+            console.log(e.target.files[0])
+            var img = e.target.files[0]
+            this.setState({ img: img })
+        }
+
     }
 
     handleSubmit(e) {
 
         // console.table(this.state)
-        let { name, email, password, repassword, country, city, restName } = this.state;
+        let { name, email, password, repassword, country, city, restName, img } = this.state;
 
         if (name.length === 0) {
 
@@ -69,6 +78,9 @@ class Rest_Reg extends Component {
         else if (restName.length === 0) {
             NotificationManager.info('Enter restaurant name');
         }
+        else if (!img) {
+            NotificationManager.warning('Upload picture');
+        }
 
 
         else if (true) {
@@ -79,7 +91,7 @@ class Rest_Reg extends Component {
             this.setState({ restaurants: restaurants })
 
             console.log('ye wala', this.state.restaurants)
-            this.writeRestaurantData(restaurants);
+            this.writeRestaurantData(restaurants, img);
 
         }
 
@@ -87,7 +99,7 @@ class Rest_Reg extends Component {
 
     }
 
-    writeRestaurantData = restaurants => {
+    writeRestaurantData = (restaurants, img) => {
 
 
 
@@ -96,28 +108,60 @@ class Rest_Reg extends Component {
 
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {
-                var restaurantInfo = auth.currentUser;
+
+                let uploadTask = storage.ref(`restaurants/${img.name}`).put(img);
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = Math.round( (snapshot.bytesTransferred / snapshot.totalBytes)*100)
+                        this.setState({progress})
+                    },
+                    (error) => {
+                        // console.log(error)
+                        NotificationManager.error(error, 'Try again!', 5000)
+
+                    },
+                    () => {
+                        storage.ref('restaurants').child(img.name).getDownloadURL().then(url => {
+                            console.log(url)
+                            restaurants.imgURL = url
 
 
-                db.collection("restaurants").doc(restaurantInfo.uid).set({
-                    restaurants
-                })
-                    .then(() => {
-                        console.log("Document successfully written!");
-                        console.log(this.props)
-                        NotificationManager.success('Restaurant successfully registered', 'Done!');
 
-                        setTimeout(() => {
-                            this.props.history.push('/login')
-                        }, 4000)
+                            var restaurantInfo = auth.currentUser;
+                            db.collection("restaurants").doc(restaurantInfo.uid).set({
+                                restaurants
+                            })
+                                .then(() => {
+                                    console.log("Document successfully written!");
+                                    console.log(this.props)
+                                    NotificationManager.success('Restaurant successfully registered', 'Done!');
+
+                                    setTimeout(() => {
+                                        this.props.history.push('/login')
+                                    }, 4000)
 
 
-                    })
-                    .catch((error) => {
-                        console.error("Error writing document: ", error);
-                        NotificationManager.error('Something went wrong', 'Try again!', 5000)
-                        // alert('error')
-                    });
+                                })
+                                .catch((error) => {
+                                    console.error("Error writing document: ", error);
+                                    NotificationManager.error('Something went wrong', 'Try again!', 5000)
+                                    // alert('error')
+                                });
+
+
+
+
+
+
+                        })
+                    }
+
+                )
+
+
+
+
+
 
             })
             .catch((error) => {
@@ -141,9 +185,10 @@ class Rest_Reg extends Component {
 
 
     render() {
+        // console.log(this.state.img)
         return (
-            <div>
-
+            <div className='container'>
+<br/>
                 <br />
                 <div>
                     <Form onSubmit={this.handleSubmit} className='shadow p-3 mb-5 bg-white rounded' >
@@ -202,6 +247,14 @@ class Rest_Reg extends Component {
                             <Form.Group as={Col} controlId="formGridFullName">
 
                                 <Form.Control type="text" name='restName' placeholder="Restaurant name" onChange={this.handleChange} />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group>
+                                <input type="file" onChange={this.handleChange} />
+                            </Form.Group>
+                            <Form.Group>
+                                <progress value={this.state.progress} max='100' />
                             </Form.Group>
                         </Form.Row>
 

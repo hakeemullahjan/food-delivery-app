@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { auth } from '../config/firebase';
+import Slider from '../components/Slider.jsx'
 
 class Home extends Component {
     constructor(props) {
@@ -9,14 +10,14 @@ class Home extends Component {
 
     componentDidMount() {
 
-        auth.onAuthStateChanged( (user)=> {
+        auth.onAuthStateChanged((user) => {
             if (user) {
                 // User is signed in.
-                console.log('===>',' User is signed in.')
+                console.log('===>', ' User is signed in.')
                 console.log(user)
             } else {
                 // No user is signed in.
-                console.log('====>','No user is signed in.')
+                console.log('====>', 'No user is signed in.')
             }
         });
     }
@@ -25,7 +26,8 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <h1>HOME</h1>
+                {/* <h1>HOME</h1> */}
+                <Slider />
 
             </div>
         );

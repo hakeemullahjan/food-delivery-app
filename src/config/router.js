@@ -5,6 +5,9 @@ import Home from '../components/Home.jsx'
 import User_Reg from '../components/User_Reg.jsx'
 import Rest_Reg from '../components/Rest_Reg.jsx'
 import Login from '../components/Login.jsx'
+import UserView from '../components/dashboards/UserView.jsx'
+
+
 
 import {Navbar,Nav,NavDropdown} from 'react-bootstrap'
 
@@ -34,12 +37,14 @@ function Navigation(){
   </Navbar.Collapse>
 </Navbar>
 
-<br/>
-          <div className="container"  >
+
+          <div   >
             <Route exact path='/' component={Home} />
             <Route path='/userregistration' component={User_Reg} />
             <Route path='/restaurantregistration'  component={Rest_Reg} />
             <Route path='/login' component={Login} />
+            <Route path='/userview' component={UserView} />
+           
           </div>
 
       </Router>

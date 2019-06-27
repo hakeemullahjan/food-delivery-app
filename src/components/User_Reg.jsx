@@ -190,8 +190,8 @@ class User_Reg extends Component {
         // console.log(this.state.users)
 
         return (
-            <div>
-
+            <div className='container'>
+                <br />
 
                 <br />
                 <div>

@@ -67,9 +67,9 @@ class Login extends Component {
     render() {
         console.log(this.state.email, this.state.password)
         return (
-            <div >
+            <div className='container' >
                 <br />
-
+<br/>
 
                 <div>
                     <Form onSubmit={this.handleSubmit} className='shadow p-3 mb-5 bg-white rounded'>
