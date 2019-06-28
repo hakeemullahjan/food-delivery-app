@@ -124,7 +124,7 @@ class User_Reg extends Component {
             .then(() => {
                 var userInfo = auth.currentUser;
 
-
+                users.uid=userInfo.uid
                 db.collection("users").doc(userInfo.uid).set({
                     users
                 })

@@ -6,6 +6,8 @@ import User_Reg from '../components/User_Reg.jsx'
 import Rest_Reg from '../components/Rest_Reg.jsx'
 import Login from '../components/Login.jsx'
 import UserView from '../components/dashboards/UserView.jsx'
+import RestaurantView from '../components/dashboards/RestaurantView.jsx'
+import UserViewScreen from '../components/detailscreen/UserViewScreen.jsx'
 
 
 
@@ -44,7 +46,8 @@ function Navigation(){
             <Route path='/restaurantregistration'  component={Rest_Reg} />
             <Route path='/login' component={Login} />
             <Route path='/userview' component={UserView} />
-           
+            <Route path='/restaurantview' component={RestaurantView}/>
+           <Route path='/userviewscreen' component={UserViewScreen}/>
           </div>
 
       </Router>

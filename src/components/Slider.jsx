@@ -21,6 +21,7 @@ class Slider extends Component {
       className="d-block w-100"
       src={img1}
       alt="First slide"
+      
     />
     <Carousel.Caption>
       <h3>First slide label</h3>
@@ -32,6 +33,7 @@ class Slider extends Component {
       className="d-block w-100"
       src={img2}
       alt="Third slide"
+      
     />
 
     <Carousel.Caption>
@@ -44,6 +46,7 @@ class Slider extends Component {
       className="d-block w-100"
       src={img3}
       alt="Third slide"
+      
     />
 
     <Carousel.Caption>

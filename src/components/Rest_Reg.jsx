@@ -119,15 +119,17 @@ class Rest_Reg extends Component {
                         // console.log(error)
                         NotificationManager.error(error, 'Try again!', 5000)
 
-                    },
+                    },  
                     () => {
                         storage.ref('restaurants').child(img.name).getDownloadURL().then(url => {
                             console.log(url)
                             restaurants.imgURL = url
-
-
+                            restaurants.foodCategories=[]
+                            restaurants.dishes=[]
 
                             var restaurantInfo = auth.currentUser;
+
+                            restaurants.uid=restaurantInfo.uid
                             db.collection("restaurants").doc(restaurantInfo.uid).set({
                                 restaurants
                             })
