@@ -23,6 +23,7 @@ class UserViewScreen extends Component {
             })
 
     }
+
     orderFood(d,p){
         let restuid = localStorage.getItem('restuid')
         let useruid = auth.currentUser.uid
@@ -33,10 +34,20 @@ class UserViewScreen extends Component {
         data.status='pending'
         data.price=p
         data.dish=d
-        db.collection('orders').doc(useruid+restuid).set(data)
+
+        const ref = db.collection('hj').doc();
+        const id = ref.id;
+        // alert(id)
+        data.orderid=id
+
+
+        db.collection('orders').doc(id).set(data)
         .then(()=>{
             alert('order done')
         })       
+        .catch(error=>{
+            alert('error')
+        })
     }
 
 

@@ -18,7 +18,9 @@ class UserView extends Component {
             result: [],
             toggle: false,
             restuid: 0,
-            orders:[]
+            orders:[],
+            orderProgress:[],
+            orderDeliver:[]
         };
         this.handleSearch = this.handleSearch.bind(this);
     }
@@ -39,20 +41,39 @@ class UserView extends Component {
                 })
             })
 
-            // db.collection('orders').get()
-            // .then(snap => {
-            //     console.log(snap.docs)
-            //     snap.docs.forEach(doc => {
-            //         // console.log(doc.data().restaurants)
-            //         console.log(doc.id)
-            //         let or = this.state.orders;
-            //         or.push(doc.data().orders)
-            //         this.setState({ orders: or })
+            db.collection('orders').get()
+            .then(snap => {
+                console.log(snap.docs)
+                snap.docs.forEach(doc => {
+                    // console.log(doc.data().restaurants)
+                    var useruid=auth.currentUser.uid
+                    console.log(useruid)
+                    console.log(doc.id)
+                    console.log(doc.data())
+                    if(useruid===doc.data().useruid && doc.data().status==='pending'){
+                        let ord = this.state.orders;
+                        ord.push(doc.data())
+                        this.setState({ orders: ord })
+                    }
+                    if(useruid===doc.data().useruid && doc.data().status==='inprogress'){
+                        let ord = this.state.orderProgress
+                        ord.push(doc.data())
+                        this.setState({ orderProgress: ord })
+                    }
+                    if(useruid===doc.data().useruid && doc.data().status==='delivered'){
+                        let ord = this.state.orderDeliver
+                        ord.push(doc.data())
+                        this.setState({ orderDeliver: ord })
+                    }
 
-            //         // console.log(doc.id)
-            //         // console.log(doc.data().name)
-            //     })
-            // })
+                    
+                    
+
+                    // console.log(doc.id)
+                    // console.log(doc.data().name)
+                })
+            })
+
         
 
     }
@@ -166,6 +187,8 @@ class UserView extends Component {
                         <Col sm={9}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
+                                   
+
                              {this.Pending()}
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
@@ -184,10 +207,24 @@ class UserView extends Component {
         );
     }
     Pending(){
+        
         return(
             <div>
                 <h1>pending</h1>
-              
+                <span> Dish  </span>
+                <span> Price </span>
+                <span> Status </span>
+ 
+              {this.state.orders.map(item=>{
+                  return(
+                      <div>
+                      <b>  <span> {item.dish} </span></b>  
+                      <b>     <span> {item.price} </span></b>
+                      <b>  <span> {item.status} </span></b>
+<hr/>
+                      </div>
+                  )
+              })}
             </div>
         )
     }
@@ -195,6 +232,20 @@ class UserView extends Component {
         return(
             <div>
                 <h1>in progress</h1>
+                <span> Dish  </span>
+                <span> Price </span>
+                <span> Status </span>
+ 
+              {this.state.orderProgress.map(item=>{
+                  return(
+                      <div>
+                         <b> <span> {item.dish} </span> </b>
+                         <b>  <span> {item.price} </span></b>
+                         <b><span> {item.status} </span></b>
+                          <hr/>
+                      </div>
+                  )
+              })}
             </div>
         )
     }
@@ -202,6 +253,20 @@ class UserView extends Component {
         return(
             <div>
                 <h1>delivered</h1>
+                <span> Dish  </span>
+                <span> Price </span>
+                <span> Status </span>
+ 
+              {this.state.orderDeliver.map(item=>{
+                  return(
+                      <div>
+                      <b>    <span> {item.dish} </span></b>
+                      <b>  <span> {item.price} </span></b>
+                      <b> <span> {item.status} </span></b>
+                          <hr/>
+                      </div>
+                  )
+              })}
             </div>
         )
     }
@@ -209,6 +274,8 @@ class UserView extends Component {
     render() {
         console.log(this.state.restaurants)
         console.log(this.state.orders)
+        console.log(this.state.orderDeliver)
+        console.log(this.state.orderProgress)
         return (
             <div className='container'>
                 {/* <h1>USER VIEW</h1> */}
